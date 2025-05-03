@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Day</title>
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #d62828;
+        text-shadow: 1px 1px 2px #fff;
+        margin-bottom: 10px;
+    }
+
+    #pizza-img {
+        width: 150px;
+        margin-bottom: 20px;
+        border-radius: 50%;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #box {
+        width: 250px;
+        height: 120px;
+        background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        color: white;
+        text-align: center;
+        line-height: 120px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 15px;
+    }
+
+    #box:hover {
+        transform: scale(1.05);
+        background: linear-gradient(135deg, #feb47b, #ff7e5f);
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background: #e63946;
+        color: white;
+        transition: 0.3s;
+        box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+        margin-bottom: 15px;
+    }
+
+    button:hover {
+        background: #ba181b;
+        transform: scale(1.1);
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        width: 220px;
+    }
+
+    li {
+        padding: 12px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        text-align: center;
+        font-size: 16px;
+        background: white;
+        transition: 0.3s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    li:hover {
+        background: #ffe066;
+        transform: scale(1.05);
+    }
+
+    .highlight {
+        background: #ffcc00 !important;
+        color: black;
+        font-weight: bold;
+    }
+
+    #menu {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #menu button {
+        background: #f77f00;
+    }
+
+    #menu button:hover {
+        background: #d62828;
+    }
+
+    footer {
+        margin-top: 30px;
+        font-size: 14px;
+        color: #555;
+    }
+    </style>
+</head>
+
+<body>
+    <h1>Pizza Day</h1>
+    <img src="./pizza/1.jpg" alt="Pizza 1" id="pizza-img">
+    <div id="box" onclick="handleClickAttr()">Дізнатися про нас</div>
+    <button id="btn">Натисни</button>
+    <h2>Наше меню піци</h2>
+    <ul id="list">
+        <li>Маргарита</li>
+        <li>Пепероні</li>
+        <li>Гавайська</li>
+    </ul>
+    <h2>Дії замовлення</h2>
+    <div id="menu">
+        <button data-action="sayOrderPiza">Замовити піцу</button>
+        <button data-action="sayNot">Відмінити замовлення</button>
+        <button data-action="randomColor">Змінити колір</button>
+    </div>
+    <footer>© 2025 Pizza Day.</footer>
+    <script>
+    // 1. Обробник через атрибут
+    function handleClickAttr() {
+        alert("Ми Pizza Day");
+    }
+
+    // 2. Обробник через властивість
+    let box = document.getElementById("box");
+    box.addEventListener("click", function() {
+        alert("Готуємо швидко та якісно");
+    });
+
+    // 3. Використання addEventListener з кількома обробниками
+    function handler1() {
+        console.log("Обробник 1");
+    }
+
+    function handler2() {
+        console.log("Обробник 2");
+    }
+
+    let btn = document.getElementById("btn");
+    btn.addEventListener("click", handler1);
+    btn.addEventListener("click", handler2);
+
+    // 4. Використання об'єкта з handleEvent
+    let objHandler = {
+        handleEvent(event) {
+            console.log("Об'єктний обробник:", event.currentTarget);
+        }
+    };
+    btn.addEventListener("click", objHandler);
+    // 5. Видалення обробника
+    setTimeout(() => {
+        btn.removeEventListener("click", handler1);
+        console.log("Обробник 1 видалено");
+    }, 10000);
+    
+    // 6. Підсвічування елементів списку
+    let list = document.getElementById("list");
+
+    list.addEventListener("click", function(event) {
+        if (event.target.tagName === "LI") {
+            let selected = document.querySelector(".highlight");
+            if (selected) selected.classList.remove("highlight");
+
+            event.target.classList.add("highlight");
+        }
+    });
+
+    // 7. Меню з data-атрибутами
+    let menu = document.getElementById("menu");
+
+    menu.addEventListener("click", function(event) {
+        let action = event.target.dataset.action;
+        if (action) {
+            menuActions[action]();
+        }
+    });
+
+    const menuActions = {
+        sayOrderPiza: () => alert("Ваше замовлення отримане!"),
+        sayNot: () => alert("Ваше замовлення відмінене!"),
+        randomColor: () => document.body.style.backgroundColor =
+            "#" + Math.floor(Math.random() * 16777215).toString(16)
+    };
+    </script>
+</body>
+
+</html>
